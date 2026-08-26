@@ -10,6 +10,18 @@ read-only and output is written to a separate directory.
 > grant permission to redistribute or commercially reuse game assets. See the
 > [legal and copyright notice](DISCLAIMER.md).
 
+## Interface preview
+
+Drop a complete game directory, RPA, or XP3 onto the window, or use the
+selection buttons on the right.
+
+![Initial application window](docs/images/home.png)
+
+After detection, filter the resources, inspect the main preview and five nearby
+thumbnails, then extract by category, selection, or drag and drop.
+
+![Resource browser after loading a game](docs/images/game-loaded.png)
+
 ## Highlights
 
 - Scan a complete game directory or an individual archive.
