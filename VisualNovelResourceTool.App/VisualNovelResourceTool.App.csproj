@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\VisualNovelResourceTool.Core\VisualNovelResourceTool.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\third_party\unrpyc\unrpyc.py" Link="third_party\unrpyc\unrpyc.py" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\third_party\unrpyc\deobfuscate.py" Link="third_party\unrpyc\deobfuscate.py" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\third_party\unrpyc\LICENSE" Link="third_party\unrpyc\LICENSE" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\third_party\unrpyc\decompiler\**\*.py" Link="third_party\unrpyc\decompiler\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\third_party\evbunpack\evbunpack.exe" Link="third_party\evbunpack\evbunpack.exe" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\third_party\evbunpack\LICENSE" Link="third_party\evbunpack\LICENSE" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\LICENSE" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\THIRD_PARTY_NOTICES.md" Link="THIRD_PARTY_NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\DISCLAIMER.md" Link="DISCLAIMER.md" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>视觉小说资源工具</AssemblyName>
+    <RootNamespace>VisualNovelResourceTool.App</RootNamespace>
+    <Version>0.1.0-beta</Version>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+</Project>

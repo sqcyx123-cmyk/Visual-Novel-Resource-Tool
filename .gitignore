@@ -1,0 +1,19 @@
+.dotnet-home/
+.nuget-packages/
+.vs/
+**/bin/
+**/obj/
+publish/
+publish-*/
+*.user
+*.suo
+*.zip
+
+# Only the unrpyc runtime subset is vendored by this project.
+third_party/unrpyc/*
+!third_party/unrpyc/LICENSE
+!third_party/unrpyc/unrpyc.py
+!third_party/unrpyc/deobfuscate.py
+!third_party/unrpyc/decompiler/
+!third_party/unrpyc/decompiler/**
+/third_party/unrpyc/un.rpyc/**
