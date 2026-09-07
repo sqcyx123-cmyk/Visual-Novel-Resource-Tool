@@ -24,7 +24,11 @@ jobs:
         run: dotnet restore VisualNovelResourceTool.sln
 
       - name: Test
-        run: dotnet test VisualNovelResourceTool.Tests -c Release --no-restore
+        shell: pwsh
+        run: |
+          # Tests is a console runner; dotnet test does not execute its assertions.
+          dotnet run --project VisualNovelResourceTool.Tests -c Release --no-restore
+          exit $LASTEXITCODE
 
       - name: Publish Windows x64
         run: dotnet publish VisualNovelResourceTool.App -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish
