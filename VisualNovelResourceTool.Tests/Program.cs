@@ -4,6 +4,14 @@ using VisualNovelResourceTool.Core;
 
 if (args.Length > 0)
 {
+    if (args is ["--process-probe", var probeRoot])
+    {
+        using var held = new FileStream(Path.Combine(probeRoot,"held.bin"),FileMode.CreateNew,FileAccess.Write,FileShare.None);
+        File.WriteAllText(Path.Combine(probeRoot,"ready.txt"),Environment.ProcessId.ToString());
+        Console.WriteLine("ready");
+        await Task.Delay(Timeout.Infinite);
+        return 0;
+    }
     if(args[0]=="--scan"&&args.Length==2){foreach(var result in new GameScanner().Scan(args[1]))Console.WriteLine($"{result.Kind} | {result.Support} | {result.Format} | {result.Path}");return 0;}
     if(args[0]=="--classify"&&args.Length>=2){foreach(var source in args.Skip(1)){IEnumerable<string> names=Path.GetExtension(source).Equals(".xp3",StringComparison.OrdinalIgnoreCase)?Xp3Archive.Open(source).Entries.Select(e=>e.Name):RpaArchive.Open(source).Entries.Select(e=>e.Name);var list=names.ToArray();Console.WriteLine(source);foreach(var group in list.GroupBy(AssetClassifier.Classify).OrderBy(g=>g.Key))Console.WriteLine($"  {group.Key}: {group.Count():N0}");Console.WriteLine("  TOP: "+string.Join(", ",list.Select(n=>n.Replace('\\','/').Split('/')[0]).GroupBy(x=>x).OrderByDescending(g=>g.Count()).Take(12).Select(g=>$"{g.Key}={g.Count()}")));}return 0;}
     if(args[0]=="--xp3-check"&&args.Length==2){var a=Xp3Archive.Open(args[1]);var image=a.Entries.First(e=>AssetClassifier.IsImage(e.Name));var bytes=await a.ReadEntryAsync(image);Console.WriteLine($"PREVIEW {image.Name} {bytes.Length:N0} bytes {Convert.ToHexString(bytes.AsSpan(0,Math.Min(12,bytes.Length)))}");var problematic=a.Entries.Where(e=>e.Name.IndexOfAny(Path.GetInvalidFileNameChars())>=0).ToArray();var root=Path.Combine(Path.GetTempPath(),"vnrt-xp3-check-"+Guid.NewGuid().ToString("N"));var result=await a.ExtractAsync(problematic,root,true);Console.WriteLine($"INVALID {problematic.Length}, EXTRACTED {result.Extracted}, FAILED {result.Failed}, RENAMED {result.Renamed}, REPORT {File.Exists(Path.Combine(root,"_提取记录.txt"))}");Directory.Delete(root,true);return 0;}
@@ -19,6 +27,7 @@ if (args.Length > 0)
 }
 
 var tests = new List<(string Name, Func<Task> Run)> { ("识别并读取标准 RPA-3.0", TestOpen), ("完整提取并校验内容", TestExtract), ("中文目录注释", TestChineseFolder), ("安全改名且不中断", TestUnsafeFilename), ("阻止路径穿越且不中断", TestTraversal), ("拒绝危险 Pickle 操作码", TestUnsafePickle), ("识别 XP3 文件头", TestXp3), ("读取 RPG Maker 普通资源", TestPlainRpgMaker), ("识别并复制散装视觉资源", TestLooseResources) };
+tests.AddRange(ReviewRegressionTests.All);
 var failures = 0;
 foreach (var test in tests) { try { await test.Run(); Console.WriteLine($"PASS {test.Name}"); } catch (Exception ex) { failures++; Console.WriteLine($"FAIL {test.Name}: {ex.Message}"); } }
 Console.WriteLine($"共 {tests.Count} 项，失败 {failures} 项。"); return failures;

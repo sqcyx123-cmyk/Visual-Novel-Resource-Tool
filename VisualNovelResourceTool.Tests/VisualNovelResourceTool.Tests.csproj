@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VisualNovelResourceTool.Core\VisualNovelResourceTool.Core.csproj" />
+    <Compile Include="..\VisualNovelResourceTool.App\AppSettings.cs" Link="AppSettings.cs" />
   </ItemGroup>
 
   <PropertyGroup>

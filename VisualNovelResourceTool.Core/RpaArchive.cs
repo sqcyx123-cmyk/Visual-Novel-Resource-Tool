@@ -20,6 +20,7 @@ public sealed class RpaArchive
 
     public static RpaArchive Open(string path, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         using var file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 64 * 1024, FileOptions.SequentialScan);
         var header = ReadLine(file);
         var parts = header.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -40,6 +41,7 @@ public sealed class RpaArchive
             var name = pair.Key switch { string s => s, byte[] b => Encoding.UTF8.GetString(b), _ => throw new InvalidDataException("RPA 文件名类型不受支持。") };
             var blocks = pair.Value as List<object?> ?? throw new InvalidDataException($"{name} 的索引结构无效。");
             if (blocks.Count == 0) continue;
+            if (blocks.Count != 1) throw new InvalidDataException($"{name} 使用多个 RPA 数据块，暂不支持；已停止读取以避免静默丢失内容。");
             var tuple = blocks[0] as object?[] ?? throw new InvalidDataException($"{name} 的数据块结构无效。");
             if (tuple.Length is not (2 or 3)) throw new InvalidDataException($"{name} 的数据块字段数量无效。");
             var entryOffset = Convert.ToInt64(tuple[0]); var length = Convert.ToInt64(tuple[1]);
@@ -78,10 +80,10 @@ public sealed class RpaArchive
             try { target = paths.Resolve(entry.Name); Directory.CreateDirectory(System.IO.Path.GetDirectoryName(target)!); }
             catch (Exception ex) { failed++; failures.Add($"{entry.Name}: {ex.Message}"); progress?.Report(new(index + 1, items.Length, entry.Name, written)); continue; }
             if (!overwrite && File.Exists(target)) { skipped++; progress?.Report(new(index + 1, items.Length, entry.Name, written)); continue; }
-            var temp = target + ".vnrt-part";
+            var temp = SafeExtractionPath.TemporaryPath(target);
             try
             {
-                await using var destination = new FileStream(temp, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024, FileOptions.Asynchronous | FileOptions.SequentialScan);
+                await using var destination = new FileStream(temp, FileMode.CreateNew, FileAccess.Write, FileShare.None, 1024 * 1024, FileOptions.Asynchronous | FileOptions.SequentialScan);
                 if (entry.Prefix.Length > 0) await destination.WriteAsync(entry.Prefix, cancellationToken);
                 source.Position = entry.Offset;
                 var remaining = entry.Length - entry.Prefix.Length;
@@ -93,7 +95,7 @@ public sealed class RpaArchive
                 }
                 await destination.FlushAsync(cancellationToken);
                 await destination.DisposeAsync();
-                File.Move(temp, target, true); extracted++;
+                File.Move(temp, target, overwrite); extracted++;
             }
             catch (OperationCanceledException) { if (File.Exists(temp)) File.Delete(temp); throw; }
             catch (Exception ex) { if (File.Exists(temp)) File.Delete(temp); failed++; failures.Add($"{entry.Name}: {ex.Message}"); }

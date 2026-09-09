@@ -76,7 +76,7 @@ internal sealed class SafePickleReader
     private List<object?> PopMarked() { var at = _stack.LastIndexOf(Mark); if (at < 0) throw new InvalidDataException("Pickle MARK 缺失。"); var result = _stack.Skip(at + 1).ToList(); _stack.RemoveRange(at, _stack.Count - at); return result; }
     private object? GetMemo(int key) => _memo.TryGetValue(key, out var value) ? value : throw new InvalidDataException("Pickle memo 引用无效。");
     private byte ReadByte() { if((++_operations&4095)==0)_token.ThrowIfCancellationRequested();if(_operations>20_000_000)throw new InvalidDataException("RPA 索引操作数量异常，已停止读取。");if(_stack.Count>1_000_000||_memo.Count>1_000_000)throw new InvalidDataException("RPA 索引容器数量异常，已停止读取。");var b = _stream.ReadByte(); return b < 0 ? throw new EndOfStreamException("RPA 索引意外结束。") : (byte)b; }
-    private byte[] ReadBytes(int length) { if (length < 0 || length > 256 * 1024 * 1024) throw new InvalidDataException("索引字段过大。"); var bytes = new byte[length]; _stream.ReadExactly(bytes); return bytes; }
+    private byte[] ReadBytes(int length) { _token.ThrowIfCancellationRequested();if (length < 0 || length > 256 * 1024 * 1024) throw new InvalidDataException("索引字段过大。"); var bytes = new byte[length];for(var offset=0;offset<length;){_token.ThrowIfCancellationRequested();var count=Math.Min(64*1024,length-offset);_stream.ReadExactly(bytes.AsSpan(offset,count));offset+=count;} return bytes; }
     private string ReadUtf8(int length) => Encoding.UTF8.GetString(ReadBytes(length));
     private ushort ReadUInt16() => BinaryPrimitives.ReadUInt16LittleEndian(ReadBytes(2));
     private uint ReadUInt32() => BinaryPrimitives.ReadUInt32LittleEndian(ReadBytes(4));
