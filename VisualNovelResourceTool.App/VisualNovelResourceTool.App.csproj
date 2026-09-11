@@ -1,18 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\VisualNovelResourceTool.Core\VisualNovelResourceTool.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\third_party\unrpyc\unrpyc.py" Link="third_party\unrpyc\unrpyc.py" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\third_party\unrpyc\deobfuscate.py" Link="third_party\unrpyc\deobfuscate.py" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\third_party\unrpyc\LICENSE" Link="third_party\unrpyc\LICENSE" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\third_party\unrpyc\decompiler\**\*.py" Link="third_party\unrpyc\decompiler\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\third_party\evbunpack\evbunpack.exe" Link="third_party\evbunpack\evbunpack.exe" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\third_party\evbunpack\LICENSE" Link="third_party\evbunpack\LICENSE" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\LICENSE" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\THIRD_PARTY_NOTICES.md" Link="THIRD_PARTY_NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\DISCLAIMER.md" Link="DISCLAIMER.md" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\third_party\unrpyc\unrpyc.py" Link="third_party\unrpyc\unrpyc.py" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\third_party\unrpyc\deobfuscate.py" Link="third_party\unrpyc\deobfuscate.py" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\third_party\unrpyc\LICENSE" Link="third_party\unrpyc\LICENSE" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\third_party\unrpyc\decompiler\**\*.py" Link="third_party\unrpyc\decompiler\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\third_party\evbunpack\evbunpack.exe" Link="third_party\evbunpack\evbunpack.exe" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\third_party\evbunpack\LICENSE" Link="third_party\evbunpack\LICENSE" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\LICENSE" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\THIRD_PARTY_NOTICES.md" Link="THIRD_PARTY_NOTICES.md" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\DISCLAIMER.md" Link="DISCLAIMER.md" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
 
   <PropertyGroup>

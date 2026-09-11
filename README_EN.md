@@ -54,8 +54,13 @@ thumbnails, then extract by category, selection, or drag and drop.
 $env:DOTNET_CLI_HOME = "$PWD\.dotnet-home"
 dotnet build VisualNovelResourceTool.sln -c Release
 dotnet run --project VisualNovelResourceTool.Tests -c Release
-dotnet publish VisualNovelResourceTool.App -c Release -r win-x64 --self-contained true
+pwsh -NoProfile -File scripts/Publish-Portable.ps1
 ```
+
+The maintained application folder is named `视觉小说资源工具` beside the source
+directory. Use and share this same folder, including `third_party`. Personal
+settings stay under `%LOCALAPPDATA%\视觉小说资源工具`. Archives are generated on
+demand with `scripts/Compress-Portable.ps1`; no separate sharing build is kept.
 
 ## Output rules
 

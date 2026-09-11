@@ -35,6 +35,7 @@ public static class UnrpycService
             finally { if (File.Exists(temp)) File.Delete(temp); }
         }
         var start = new ProcessStartInfo(python) { WorkingDirectory = Path.GetDirectoryName(script)! };
+        start.Environment["PYTHONDONTWRITEBYTECODE"] = "1";
         start.ArgumentList.Add(script); start.ArgumentList.Add(output); start.ArgumentList.Add("--try-harder");
         var result = await ExternalProcess.RunAsync(start, token);
         var log = result.Output + result.Error;

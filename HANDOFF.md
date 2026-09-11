@@ -132,3 +132,9 @@ GitHub CLI 路径 `C:\Program Files\GitHub CLI\gh.exe`，历史账户 sqcyx123-c
 主要修复输出数据保护、扫描漏报/旧输出污染、异步操作互斥与取消、旧预览覆盖、外部进程退出与缓存清理、XP3/DPMX 边界、RPG Maker 文件名绑定和缺密钥隔离、PAK 重名隔离。保留现有架构与依赖，无新版本/标签；旧发布目录、ZIP 与第三方材料均保留。新 GUI 冒烟入口为 scripts/Test-WindowsSmoke.ps1。日常验收请使用本次 bin/Release 构建，旧 publish 不会自动更新。
 
 不要继续沿用“只通过 9 项测试”作为当前范围，也不要将当前样本通过扩张成所有游戏完整性/所有鼠标拖出行为均通过。未充分覆盖项和后续优先级已在审查记录明确列出。
+
+## 13. 成品与启动入口整理（2026-09-11）
+
+用户明确授权清理被新成品替代的旧目录。本机当前成品统一为 `D:\Betm\game\视觉小说资源工具`，桌面同名快捷方式指向其中主程序，日常使用和分享共用这一份。此前“保留 publish/publish-webm/根 ZIP”的要求已由本次整理授权更新：旧发布目录和临时 ReviewHost 已移入回收站，根 ZIP 已校验与原 publish 的 484 个文件完全相同并移动到 `.artifacts/recovery/整理前桌面版.zip` 作为唯一回退备份。个人设置不变，源码、依赖缓存与正常构建缓存保留。
+
+维护入口为 scripts/Publish-Portable.ps1；按需压缩为 scripts/Compress-Portable.ps1。目录、数据边界、独立启动验证及限制见 [交付说明](docs/DELIVERY.md)。不再用旧 publish 或 App/bin 作为日常入口，也不要把成品文件夹与开发目录一并分享。

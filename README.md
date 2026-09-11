@@ -44,14 +44,16 @@
 
 ## 构建
 
+本地统一成品与桌面入口的维护方式见 [交付目录说明](docs/DELIVERY.md)。日常使用和分享共用源码目录旁的 `视觉小说资源工具` 文件夹，源码和缓存保留在开发目录。不要把旧的 publish 路径当作当前启动入口。
+
 ```powershell
 $env:DOTNET_CLI_HOME = "$PWD\.dotnet-home"
 dotnet build VisualNovelResourceTool.sln -c Release
 dotnet run --project VisualNovelResourceTool.Tests -c Release
-dotnet publish VisualNovelResourceTool.App -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
+pwsh -NoProfile -File scripts/Publish-Portable.ps1
 ```
 
-`publish` 中的 `视觉小说资源工具.exe` 是自包含版本，不要求电脑预先安装 .NET。`third_party/unrpyc` 目录需和 EXE 一起保留。
+成品文件夹中的 `视觉小说资源工具.exe` 是自包含版本，不要求电脑预先安装 .NET。`third_party/unrpyc` 目录需和 EXE 一起保留。
 `third_party/evbunpack` 是 Apache 2.0 许可的 EXE 虚拟文件系统提取组件，也需和主程序一起保留。
 
 第三方组件和许可证见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。项目自身采用 [MIT License](LICENSE)。
